@@ -1,0 +1,48 @@
+version: '2'
+services:
+
+  postgres:
+    image: postgres:alpine
+    environment:
+      - POSTGRES_DB=openkudo
+      - POSTGRES_USER=openkudo
+      - POSTGRES_PASSWORD=openkudo
+    ports:
+      -  54321:5432
+  nginx:
+    image: nginx
+    ports:
+      - 8080:80
+    links:
+      - php:php
+    volumes:
+      - ./docker/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    volumes_from:
+      - php
+    depends_on:
+      - php
+  php:
+    build: .
+    volumes:
+      - .:/var/www/html
+      - ./docker/php/www.conf:/usr/local/etc/php-fpm.d/www.conf
+    depends_on:
+      - postgres
+  projection_thank_you:
+    build: ./docker/php/projection/
+    entrypoint:
+      - ./docker/php/wait_for_sql.sh
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+    command: php bin/console event-store:projection:run thank_you_projection
+  projection_person:
+    build: ./docker/php/projection/
+    entrypoint:
+      - ./docker/php/wait_for_sql.sh
+    volumes:
+      - .:/app
+    depends_on:
+      - postgres
+    command: php bin/console event-store:projection:run person_projection

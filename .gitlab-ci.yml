@@ -1,0 +1,15 @@
+stages:
+  - test
+
+php-7.1:
+  image: tetraweb/php:7.1
+  stage: test
+  tags:
+    - docker
+  script:
+    - docker-php-ext-enable zip xdebug
+    - composer self-update
+    - composer install --no-suggest -o --prefer-dist -n
+    - vendor/bin/php-cs-fixer fix --dry-run --diff src
+    - vendor/bin/security-checker security:check
+    - vendor/bin/phpunit -vv --coverage-text --colors=never

@@ -1,0 +1,7 @@
+services:
+  openkudo.post_thank_you_handler:
+    class: \OpenKudo\Domain\Model\Kudo\Handler\PostThankYouHandler
+    arguments: ['@thank_you_list']
+  openkudo.register_person_handler:
+    class: \OpenKudo\Domain\Model\Person\Handler\RegisterPersonHandler
+    arguments: ['@person_list']

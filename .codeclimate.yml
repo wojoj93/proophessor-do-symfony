@@ -1,0 +1,17 @@
+version: 2
+
+exclude_patterns:
+    - var/
+    - vendor/
+    - app/
+    - web/
+plugins:
+    duplication:
+        enabled: true
+    phpcodesniffer:
+        enabled: true
+        config:
+            file_extensions: php
+            standard: PSR2
+    structure:
+        enabled: false

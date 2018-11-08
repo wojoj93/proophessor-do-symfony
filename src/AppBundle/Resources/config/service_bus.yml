@@ -1,0 +1,15 @@
+prooph_service_bus:
+  command_buses:
+    kudo_command_bus:
+      router:
+        type: 'prooph_service_bus.command_bus_router'
+        routes:
+          'OpenKudo\Domain\Model\Kudo\Command\PostThankYou': 'openkudo.post_thank_you_handler'
+          'OpenKudo\Domain\Model\Person\Command\RegisterPerson': 'openkudo.register_person_handler'
+
+  event_buses:
+    kudo_event_bus:
+      plugins:
+        - 'prooph_service_bus.on_event_invoke_strategy'
+      router:
+        type: 'prooph_service_bus.event_bus_router'
